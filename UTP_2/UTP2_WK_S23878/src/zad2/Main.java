@@ -29,9 +29,9 @@ public class Main {
             .filter(str -> str.startsWith("WAW"))
             .map(str -> {
               String[] parts = str.split(" ");
-                      String destination = parts[1];
-                      double pricePLN = Double.parseDouble(parts[2]) * ratePLNvsEUR;
-                      return "to " + destination + " - price in PLN:\t" + pricePLN;
+              String destination = parts[1];
+              double pricePLN = Double.parseDouble(parts[2]) * ratePLNvsEUR;
+              return "to " + destination + " - price in PLN:\t" + pricePLN;
             })
             .collect(Collectors.toList());
     /*<-- tu należy dopisać fragment

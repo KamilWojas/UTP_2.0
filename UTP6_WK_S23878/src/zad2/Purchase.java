@@ -14,20 +14,11 @@ public class Purchase implements Serializable {
     private String prod;
     private String data;
     private Double price;
-    private PropertyChangeSupport pcs;
-    private VetoableChangeSupport vcs;
-
-    public Purchase() {
-        pcs = new PropertyChangeSupport(this);
-        vcs = new VetoableChangeSupport(this);
-    }
 
     public Purchase(String prod, String data, Double price) {
         this.prod = prod;
         this.data = data;
         this.price = price;
-        pcs = new PropertyChangeSupport(this);
-        vcs = new VetoableChangeSupport(this);
     }
 
     public String getProd() {
@@ -35,9 +26,7 @@ public class Purchase implements Serializable {
     }
 
     public void setProd(String prod) {
-        String oldProd = this.prod;
         this.prod = prod;
-        pcs.firePropertyChange("prod", oldProd, prod);
     }
 
     public String getData() {
@@ -46,9 +35,8 @@ public class Purchase implements Serializable {
 
     public void setData(String data) throws PropertyVetoException {
         String oldData = this.data;
-        vcs.fireVetoableChange("data", oldData, data);
         this.data = data;
-        pcs.firePropertyChange("data", oldData, data);
+        firePropertyChange("data", oldData, data);
     }
 
     public Double getPrice() {
@@ -56,26 +44,27 @@ public class Purchase implements Serializable {
     }
 
     public void setPrice(Double price) throws PropertyVetoException {
+        if (price < 1000) {
+            throw new PropertyVetoException("Price change to: " + price + " not allowed", null);
+        }
         Double oldPrice = this.price;
-        vcs.fireVetoableChange("price", oldPrice, price);
         this.price = price;
-        pcs.firePropertyChange("price", oldPrice, price);
+        firePropertyChange("price", oldPrice, price);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        pcs.addPropertyChangeListener(listener);
+        propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        pcs.removePropertyChangeListener(listener);
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
-    public void addVetoableChangeListener(VetoableChangeListener listener) {
-        vcs.addVetoableChangeListener(listener);
-    }
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    public void removeVetoableChangeListener(VetoableChangeListener listener) {
-        vcs.removeVetoableChangeListener(listener);
+    private void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+        System.out.println("Change value of: " + propertyName + " from: " + oldValue + " to: " + newValue);
     }
 
     @Override
@@ -83,3 +72,4 @@ public class Purchase implements Serializable {
         return "Purchase [prod=" + prod + ", data=" + data + ", price=" + price + "]";
     }
 }
+

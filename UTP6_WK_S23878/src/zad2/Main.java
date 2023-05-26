@@ -16,19 +16,10 @@ public class Main {
     System.out.println(purch);
 
     purch.addPropertyChangeListener(evt -> {
-      System.out.println("Change value of: " + evt.getPropertyName() +
-              " from: " + evt.getOldValue() + " to: " + evt.getNewValue());
-    });
-
-    purch.addVetoableChangeListener(evt -> {
-      if (evt.getPropertyName().equals("price")) {
-        Double newPrice = (Double) evt.getNewValue();
-        if (newPrice < 1000.0) {
-          throw new PropertyVetoException("Price change to: " + newPrice + " not allowed", evt);
-        }
+      if (evt.getPropertyName().equals("data") || evt.getPropertyName().equals("price")) {
+        System.out.println(evt.getNewValue());
       }
     });
-
 
     try {
       purch.setData("w promocji");

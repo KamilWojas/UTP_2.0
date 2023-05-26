@@ -6,7 +6,7 @@
 
 package zad1;
 
-/*
+
 import java.io.*;
 import java.util.*;
 
@@ -21,9 +21,8 @@ public class Main {
       for (String od : odlist) System.out.println(od);
     }
     // --- część bazodanowa
-    String url = /*<-- tu należy wpisać URL bazy danych */
-/*
-    Database db = new Database(url, travelData);
+    String url = "jdbc:mysql://localhost:3306/travel_db";
+            Database db = new Database(url, travelData);
     db.create();
     db.showGui();
   }
